@@ -9,5 +9,13 @@ namespace CursoEFCore.Data
         {
             optionsBuilder.UseSqlServer("Data source=(localdb)\\MSSQLLocalDB; initial Catalog= CursoEFCore; Integrated Security=true");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+        }
+
+        public DbSet<Pedido> Pedidos{ get; set; }
+
+       
     }
 }
