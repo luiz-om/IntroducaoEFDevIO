@@ -11,6 +11,7 @@ namespace CursoEFCore.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // na primeira execução varre a aplicação para encontrar classes que foram implementadas com IEntityTypeConfiguration
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
         }
 
