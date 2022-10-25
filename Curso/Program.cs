@@ -87,5 +87,27 @@ static void InserirDadosEmMassa()
 
 
 }
+static void ConsultaDados()
+{
+    using var db = new ApplicationContext();
+
+    //Consulta por sintaxe 
+  //  var consultaPorSintaxe = (from c in db.Clientes where c.Id > 0 select c).ToList();
+    //Consulta por metodos
+    var consultaPorMetodo =  db.Clientes.Where(p => p.Id > 0 ).ToList();
+
+    foreach( var clientes in consultaPorMetodo)
+    {
+        //Estudar Metodos LINQ
+        Console.WriteLine($"Consultado Cliente {clientes.Id}");
+        //Clientes.Find(clientes.Id);
+        db.Clientes.FirstOrDefault(p => p.Id == clientes.Id);
+
+
+    }
+
+}
 //InserirProduto();
-InserirDadosEmMassa();
+//InserirDadosEmMassa();
+
+ConsultaDados();
