@@ -144,8 +144,43 @@ static void CadastrarPedido()
 //InserirDadosEmMassa();
 //ConsultaDados();
 //CadastrarPedido();
-ConsultarPedidoCarregamentoAdiantado();
+//ConsultarPedidoCarregamentoAdiantado();
+//AtualizarDados();
+RemoverRegistro();
+static void AtualizarDados()
+{
+    using var db = new ApplicationContext();
+    /* Console.WriteLine("Digite qual id quer alterar: ");
+     var idAlteracao = int.Parse(Console.ReadLine());
+     var cliente = db.Clientes.Find(idAlteracao);
+     Console.WriteLine("Digite o novo nome: ");
+     var nomeAlterado = Console.ReadLine();
+     cliente.Nome = nomeAlterado;*/
 
+    #region Dados Descnectados
+    /*   Tambem é possivel criar  um objeto cliente
+           e nao usar a o metodo find */
+    var cliente = new Cliente
+    {
+        Id = 2, 
+    };
+   // var cliente = db.Clientes.Find(2);
+   db.Attach(cliente);
+    var clienteDesconectado = new
+    {
+        Nome = "Maria Rita Vieira",
+        Telefone = "67698153415",
+    };
+    db.Entry(cliente).CurrentValues.SetValues(clienteDesconectado);
+    #endregion
+
+    //.Update() Atualiza todos os campos do objeto passado independente de quantos campos realmente foram alterados
+    // db.Clientes.Update(cliente);
+
+    db.SaveChanges();
+
+
+}
 static void ConsultarPedidoCarregamentoAdiantado()
 {
     using var db = new ApplicationContext();
@@ -157,4 +192,12 @@ static void ConsultarPedidoCarregamentoAdiantado()
 Console.WriteLine(pedidos.Count);
 
 
+}
+
+static void RemoverRegistro()
+{
+    using var db = new ApplicationContext();
+    var cliente = db.Clientes.Find(2);
+    db.Clientes.Remove(cliente);
+    db.SaveChanges();
 }
