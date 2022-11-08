@@ -4,6 +4,7 @@ using CursoEFCore.Data;
 using CursoEFCore.Domain;
 using CursoEFCore.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 static void InserirProduto()
 {
@@ -101,13 +102,59 @@ static void ConsultaDados()
         //Estudar Metodos LINQ
         Console.WriteLine($"Consultado Cliente {clientes.Id}");
         //Clientes.Find(clientes.Id);
-        db.Clientes.FirstOrDefault(p => p.Id == clientes.Id);
+        var cc =db.Clientes.FirstOrDefault(p => p.Id == clientes.Id);
+        Console.WriteLine(cc);
 
 
     }
 
 }
+static void CadastrarPedido()
+{
+    using var db = new ApplicationContext();
+
+    var cliente = db.Clientes.FirstOrDefault(p => p.Id == 2);
+    var produto = db.Produtos.FirstOrDefault();
+
+    var pedido = new Pedido {
+        ClienteId = cliente.Id,
+        IniciadoEm = DateTime.Now,
+        FinalizadoEm = DateTime.Now,
+        Observacao = "Pedido Teste2",
+        Status = StatusPedido.Analise,
+        TipoFrete = TipoFrete.SEMFRETE,
+        Itens = new List<PedidoItem>
+        {
+            new PedidoItem
+            {
+                ProdutoId = produto.Id,
+                Desconto = 0,
+                Quantidade = 1,
+                Valor = 10,
+            }
+        }
+    };
+    db.Pedidos.Add(pedido);
+
+    db.SaveChanges();
+    
+
+}
 //InserirProduto();
 //InserirDadosEmMassa();
+//ConsultaDados();
+//CadastrarPedido();
+ConsultarPedidoCarregamentoAdiantado();
 
-ConsultaDados();
+static void ConsultarPedidoCarregamentoAdiantado()
+{
+    using var db = new ApplicationContext();
+    var pedidos = db.Pedidos
+        .Include(p=> p.Itens)
+        .ThenInclude(p => p.Produto)
+        .ToList();
+
+Console.WriteLine(pedidos.Count);
+
+
+}
